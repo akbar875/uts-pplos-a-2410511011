@@ -1,0 +1,7 @@
+node_modules/
+.env
+vendor/
+.DS_Store
+*.log
+bootstrap/cache/*.php
+storage/*.key
