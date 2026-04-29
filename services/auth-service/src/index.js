@@ -1,11 +1,12 @@
 require('dotenv').config();
 
+// Import model user
+require('./models/userModel');
+require ('./models/refreshTokenModel');
+
 const express = require('express');
 const cors = require('cors');
 const sequelize = require('./config/db');
-
-// Daftarkan model agar asosiasi antar tabel terbentuk
-require('./models/userModel');
 
 const authRoutes = require('./routes/authRoutes');
 
@@ -22,11 +23,7 @@ app.use('/api/auth', authRoutes);
 
 // Endpoint pengecekan status service
 app.get('/info', (req, res) =>
-  res.status(200).json({ 
-    success: true, 
-    service: 'auth-service', 
-    status: 'aktif' 
-  })
+  res.status(200).json({ success: true, service: 'auth-service', status: 'aktif' })
 );
 
 // Untuk menangani rute yang tidak ditemukan
