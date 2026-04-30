@@ -177,4 +177,107 @@ router.get('/me', verifikasiToken, async (req, res) => {
     }
 });
 
+// Mengarahkan ke halaman login GitHub 
+router.get('/oauth/github', (req, res) => {
+    const parameter = new URLSearchParams({
+        client_id:    process.env.GITHUB_CLIENT_ID,
+        redirect_uri: process.env.GITHUB_CALLBACK_URL,
+        scope:        'user:email',
+    });
+    // Redirect ke GitHub menggunakan Authorization Code Flow
+    res.redirect(`https://github.com/login/oauth/authorize?${parameter.toString()}`);
+});
+
+// Menerima kode dari GitHub 
+router.get('/oauth/github/callback', async (req, res) => {
+    try {
+        const { code } = req.query;
+
+        // Pengecekan input
+        if (!code)
+            return res.status(400).json({ success: false, pesan: 'Kode otorisasi tidak ditemukan', data: null });
+
+        // Tukar kode otorisasi dengan access token GitHub
+        const responToken = await fetch('https://github.com/login/oauth/access_token', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                client_id:     process.env.GITHUB_CLIENT_ID,
+                client_secret: process.env.GITHUB_CLIENT_SECRET,
+                code,
+                redirect_uri:  process.env.GITHUB_CALLBACK_URL,
+            }),
+        });
+        const dataToken   = await responToken.json();
+        const tokenGithub = dataToken.access_token;
+
+        // Pengecekan respon
+        const tokenGithub = responToken.data.access_token;
+        if (!tokenGithub)
+            return res.status(401).json({ success: false, pesan: 'Gagal mendapatkan token dari GitHub', data: null });
+
+        // Ambil data pengguna dan daftar email dari GitHub API secara bersamaan
+        const [responPengguna, responEmail] = await Promise.all([
+            fetch('https://api.github.com/user', {
+                headers: { Authorization: `Bearer ${tokenGithub}` },
+            }),
+            fetch('https://api.github.com/user/emails', {
+                headers: { Authorization: `Bearer ${tokenGithub}` },
+            }),
+        ]);
+        const dataPengguna = await responPengguna.json();
+        const dataEmail    = await responEmail.json();
+
+        // Ambil email utama yang sudah diverifikasi oleh GitHub
+        const emailUtama =
+             dataEmail.find((e) => e.primary && e.verified)?.email || dataPengguna.email;
+
+        // Pengecekan email
+        if (!emailUtama)
+            return res.status(400).json({ success: false, pesan: 'Tidak dapat mengambil email dari GitHub', data: null });
+
+        // Cari pengguna berdasarkan ID OAuth GitHub
+        let pengguna = await User.findOne({ where: { id_oauth: String(dataPengguna.id), provider_oauth: 'github' }});
+
+        // Jika pengguna tidak ditemukan
+        if (!pengguna) {
+            // Cek apakah email sudah terdaftar sebagai akun lokal
+            pengguna = await User.findOne({ where: { email: emailUtama } });
+
+            // Jika pengguna lokal ditemukan
+            if (pengguna) {
+                // Hubungkan akun lokal yang ada dengan akun GitHub
+                pengguna.provider_oauth = 'github';
+                pengguna.id_oauth       = String(dataPengguna.id);
+                pengguna.url_foto       = dataPengguna.avatar_url;
+                await pengguna.save();
+            } else {
+                // Buat akun baru dari data GitHub (simpan nama, email, foto profil)
+                pengguna = await User.create({
+                    nama:           dataPengguna.name || dataPengguna.login,
+                    email:          emailUtama,
+                    provider_oauth: 'github',
+                    id_oauth:       String(dataPengguna.id),
+                    url_foto:       dataPengguna.avatar_url,
+                });
+            }
+        }
+
+        // Buat JWT lalu redirect ke frontend dengan token
+        const { accessToken, refreshToken } = buatToken(pengguna);
+        await simpanRefreshToken(pengguna.id, refreshToken);
+
+        const parameterRedirect = new URLSearchParams({ access_token:  accessToken, refresh_token: refreshToken});
+
+        return res.redirect( `${process.env.FRONTEND_URL}/oauth/callback?${parameterRedirect.toString()}`);
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ success: false, pesan: 'Terjadi kesalahan saat proses OAuth', data: null });
+    }
+});
+
 module.exports = router;
