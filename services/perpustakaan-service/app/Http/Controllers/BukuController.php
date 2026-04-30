@@ -14,18 +14,21 @@ class BukuController extends Controller
     // GET /api/buku untuk katalog publik dengan paging dan filtering
     public function index(Request $request)
     {
+        // Paging
         $perHalaman = (int) $request->query('per_halaman', 10);
         $halaman = (int) $request->query('halaman', 1);
         $cari = $request->query('cari');
         $kategoriId = $request->query('kategori_id');
         $tahun = $request->query('tahun_terbit');
 
+        // Filtering
         $query = Buku::with(['kategori', 'penulis'])
             ->when($cari, fn($q) => $q->where('judul', 'like', "%{$cari}%"))
             ->when($kategoriId, fn($q) => $q->where('kategori_id', $kategoriId))
             ->when($tahun, fn($q) => $q->where('tahun_terbit', $tahun))
             ->orderBy('created_at', 'desc');
 
+        // Ambil data
         $total = $query->count();
         $buku = $query->skip(($halaman - 1) * $perHalaman)->take($perHalaman)->get();
 
@@ -46,6 +49,7 @@ class BukuController extends Controller
     {
         $buku = Buku::with(['kategori', 'penulis', 'stok', 'tag', 'ulasan'])->find($id);
 
+        // Pengecekan buku ada
         if (!$buku)
             return response()->json([
                 'success' => false,
@@ -59,7 +63,7 @@ class BukuController extends Controller
     // POST /api/buku untuk menambah buku dilakukan oleh admin
     public function store(Request $request)
     {
-        // Pengecekan input manual
+        // Pengecekan data buku
         if (!$request->kategori_id)
             return response()->json(['success' => false, 'pesan' => 'Kategori wajib diisi', 'data' => null], 400);
 
