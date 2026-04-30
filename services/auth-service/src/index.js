@@ -1,14 +1,14 @@
 require('dotenv').config();
 
-// Import model user
+// Import model
 require('./models/userModel');
-require ('./models/refreshTokenModel');
+require('./models/refreshTokenModel');
 
 const express = require('express');
 const cors = require('cors');
 const sequelize = require('./config/db');
 
-const authRoutes = require('./routes/authRoutes');
+const authController = require('./controllers/authController');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -18,31 +18,26 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rute utama auth service
-app.use('/api/auth', authRoutes);
+// Daftarkan router auth
+app.use('/api/auth', authController);
 
-// Endpoint pengecekan status service
-app.get('/info', (req, res) =>
-  res.status(200).json({ success: true, service: 'auth-service', status: 'aktif' })
-);
-
-// Untuk menangani rute yang tidak ditemukan
+// Tangani rute yang tidak ditemukan
 app.use((req, res) =>
-  res.status(404).json({ success: false, message: 'Rute tidak ditemukan' })
+  res.status(404).json({ success: false, pesan: 'Rute tidak ditemukan' })
 );
 
-// Untuk menangani error yang tidak terduga
+// Tangani error tidak terduga
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server' });
+  res.status(500).json({ success: false, pesan: 'Terjadi kesalahan pada server' });
 });
 
-// Sinkronisasi database lalu jalankan ke server
+// Sinkronisasi database lalu jalankan server
 sequelize
   .sync({ alter: true })
   .then(() => {
     console.log('Database auth-db berhasil tersinkronisasi');
-    app.listen(PORT, () => 
+    app.listen(PORT, () =>
       console.log(`Auth-service berjalan di port ${PORT}`)
     );
   })
