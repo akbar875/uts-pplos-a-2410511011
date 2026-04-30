@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 // Model Penulis
 class PenulisBuku extends Model {
-    protected $table    = 'author_buku';
+    protected $table = 'author_buku';
     protected $fillable = ['buku_id', 'nama_penulis'];
     // Relasi
     public function buku() { 

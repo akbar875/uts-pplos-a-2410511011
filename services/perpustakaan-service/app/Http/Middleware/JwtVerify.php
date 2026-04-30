@@ -22,8 +22,8 @@ class JwtVerify
         if (!$headerOtorisasi || !str_starts_with($headerOtorisasi, 'Bearer '))
             return response()->json([
                 'success' => false,
-                'message'   => 'Token akses diperlukan',
-                'data'    => null
+                'message' => 'Token akses diperlukan',
+                'data' => null
             ], 401);
 
         // Ambil token dari header
@@ -39,27 +39,27 @@ class JwtVerify
             if ($peran && $terdekode->peran !== $peran)
                 return response()->json([
                     'success' => false,
-                    'message'   => 'Hak akses tidak mencukupi',
-                    'data'    => null
+                    'message' => 'Hak akses tidak mencukupi',
+                    'data' => null
                 ], 403);
 
         } catch (ExpiredException) {
             return response()->json([
                 'success' => false,
-                'message'   => 'Token akses sudah kedaluwarsa',
-                'data'    => null
+                'message' => 'Token akses sudah kedaluwarsa',
+                'data' => null
             ], 401);
         } catch (SignatureInvalidException) {
             return response()->json([
                 'success' => false,
-                'message'   => 'Tanda token tidak valid',
-                'data'    => null
+                'message' => 'Tanda token tidak valid',
+                'data' => null
             ], 401);
         } catch (Throwable) {
             return response()->json([
                 'success' => false,
-                'message'   => 'Token akses tidak valid',
-                'data'    => null
+                'message' => 'Token akses tidak valid',
+                'data' => null
             ], 401);
         }
 

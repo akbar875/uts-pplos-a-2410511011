@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 // Model Tag
 class TagBuku extends Model {
-    protected $table    = 'tag_buku';
+    protected $table = 'tag_buku';
     protected $fillable = ['buku_id', 'tag'];
     // Relasi
     public function buku() { 

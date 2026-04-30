@@ -5,7 +5,7 @@ use Illuminate\Support\Str;
 
 // Model Kategori
 class Kategori extends Model {
-    protected $table    = 'kategori';
+    protected $table = 'kategori';
     protected $fillable = ['nama_kategori', 'slug', 'untuk_usia'];
 
     // Auto-generate slug saat create

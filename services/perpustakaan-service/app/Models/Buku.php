@@ -20,11 +20,16 @@ class Buku extends Model {
     ];
 
     // Relasi
-    public function kategori()  { return $this->belongsTo(Kategori::class, 'kategori_id'); }
-    public function penulis()   { return $this->hasMany(PenulisBuku::class, 'buku_id'); }
-    public function stok()      { return $this->hasMany(StokBuku::class, 'buku_id'); }
-    public function tag()       { return $this->hasMany(TagBuku::class, 'buku_id'); }
-    public function ulasan()    { return $this->hasMany(UlasanBuku::class, 'buku_id'); }
+    public function kategori()  { 
+        return $this->belongsTo(Kategori::class, 'kategori_id'); }
+    public function penulis()   { 
+        return $this->hasMany(PenulisBuku::class, 'buku_id'); }
+    public function stok()      { 
+        return $this->hasMany(StokBuku::class, 'buku_id'); }
+    public function tag()       { 
+        return $this->hasMany(TagBuku::class, 'buku_id'); }
+    public function ulasan()    { 
+        return $this->hasMany(UlasanBuku::class, 'buku_id'); }
 
     // Hitung rata-rata nilai ulasan
     public function rataRataNilai(): float {
