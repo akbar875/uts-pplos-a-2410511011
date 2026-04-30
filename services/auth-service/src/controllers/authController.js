@@ -1,6 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
+const RefreshToken = require('../models/refreshTokenModel');
+const jwt = require('jsonwebtoken');
 
 // JWT dipanggil dari file middleware terpisah
 const { verifikasiToken } = require('../middleware/jwtMiddleware');
@@ -87,6 +89,90 @@ router.post('/login', async (req, res) => {
 
     } catch (err) {
         console.error(err);
+        return res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server', data: null });
+    }
+});
+
+//  Memperbarui access token 
+router.post('/refresh', async (req, res) => {
+    try {
+        const { refresh_token } = req.body;
+
+        // Pengecekan input
+        if (!refresh_token)
+            return res.status(400).json({ success: false, message: 'Refresh token wajib diisi', data: null });
+
+        // Verifikasi refresh token
+        const terdekode = jwt.verify(refresh_token, process.env.JWT_REFRESH_SECRET);
+
+        // Cek token di database, pastikan belum dicabut
+        const tersimpan = await RefreshToken.findOne({ where: { token: refresh_token, dicabut: false }});
+
+        // Jika token tidak ditemukan, atau sudah dicabut, atau sudah kedaluwarsa   
+        if (!tersimpan || new Date() > tersimpan.kedaluwarsa_pada)
+            return res.status(401).json({ success: false, message: 'Refresh token tidak valid atau sudah kedaluwarsa', data: null });
+
+        // Cari pengguna
+        const pengguna = await User.findByPk(terdekode.id);
+        if (!pengguna)
+            return res.status(401).json({ success: false, message: 'Pengguna tidak ditemukan', data: null });
+
+        // Cabut token lama lalu buat token baru (rotasi token)
+        tersimpan.dicabut = true;
+        await tersimpan.save();
+
+        const { accessToken, refreshToken: tokenBaru } = buatToken(pengguna);
+        await simpanRefreshToken(pengguna.id, tokenBaru);
+
+        return res.status(200).json({ success: true, message: 'Token berhasil diperbarui', data: {
+            access_token:  accessToken,
+            refresh_token: tokenBaru,
+            tipe_token:    'Bearer',
+        },
+    });
+
+    } catch (err) {
+        return res.status(401).json({ success: false, message: 'Refresh token tidak valid', data: null });
+    }
+});
+
+//  Logout token 
+router.post('/logout', async (req, res) => {
+    try {
+        const { refresh_token } = req.body;
+
+        // Pengecekan input
+        if (!refresh_token)
+            return res.status(400).json({ success: false, message: 'Refresh token wajib diisi', data: null });
+
+        // Cari refresh token lalu tandai sebagai dicabut (blacklist)
+        const tersimpan = await RefreshToken.findOne({ where: { token: refresh_token } });
+        if (tersimpan) {
+            tersimpan.dicabut = true;
+            await tersimpan.save();
+        }
+
+        return res.status(200).json({ success: true, message: 'Berhasil keluar', data: null });
+
+    } catch (err) {
+        return res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server', data: null });
+    }
+});
+
+// Mengambil data pengguna yang sedang login dengan verifikasiToken dipanggil dari middleware/jwtMiddleware.js
+router.get('/me', verifikasiToken, async (req, res) => {
+    try {
+        const pengguna = await User.findByPk(req.pengguna.id, {
+            attributes: ['id', 'nama', 'email', 'peran', 'provider_oauth', 'url_foto', 'dibuat_pada'],
+        });
+
+        // Jika pengguna tidak ditemukan
+        if (!pengguna)
+            return res.status(404).json({ success: false, message: 'Pengguna tidak ditemukan', data: null });
+
+        return res.status(200).json({ success: true, message: 'Data pengguna berhasil diambil', data: pengguna });
+
+    } catch (err) {
         return res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server', data: null });
     }
 });
