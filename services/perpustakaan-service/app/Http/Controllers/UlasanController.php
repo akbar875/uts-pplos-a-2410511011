@@ -80,11 +80,7 @@ class UlasanController extends Controller
             'komentar' => $request->komentar,
         ]);
 
-        return response()->json([
-            'success' => true,
-            'pesan' => 'Ulasan berhasil ditambahkan',
-            'data' => $ulasan
-        ], 201);
+        return response()->json([ 'success' => true, 'pesan' => 'Ulasan berhasil ditambahkan', 'data' => $ulasan ], 201);
     }
 
     // DELETE /api/buku/{id}/ulasan/{ulasanId} untuk menghapus ulasan

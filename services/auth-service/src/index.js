@@ -18,15 +18,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Daftarkan router auth
+// Mendaftarkan router auth
 app.use('/api/auth', authController);
 
-// Tangani rute yang tidak ditemukan
+// Untuk menangani rute yang tidak ditemukan
 app.use((req, res) =>
   res.status(404).json({ success: false, pesan: 'Rute tidak ditemukan' })
 );
 
-// Tangani error tidak terduga
+// Untuk menangani error tidak terduga
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ success: false, pesan: 'Terjadi kesalahan pada server' });

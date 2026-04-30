@@ -13,10 +13,10 @@ class Buku extends Model {
 
     // Konversi nilai integer
     protected $casts = [
-        'jumlah_halaman'   => 'integer',
-        'tahun_terbit'     => 'integer',
-        'jumlah_total'     => 'integer',
-        'jumlah_tersedia'  => 'integer',
+        'jumlah_halaman' => 'integer',
+        'tahun_terbit' => 'integer',
+        'jumlah_total' => 'integer',
+        'jumlah_tersedia' => 'integer',
     ];
 
     // Relasi

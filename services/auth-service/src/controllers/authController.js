@@ -12,7 +12,7 @@ const { buatToken, simpanRefreshToken } = require('../utils/tokenHelper');
 
 const router = express.Router();
 
-//  Mendaftarkan akun baru 
+// Mendaftarkan akun baru 
 router.post('/register', async (req, res) => {
     try {
         const { nama, email, password } = req.body;
@@ -74,14 +74,14 @@ router.post('/login', async (req, res) => {
         await simpanRefreshToken(pengguna.id, refreshToken);
 
         return res.status(200).json({ success: true, message: 'Berhasil masuk', data: {
-            access_token:  accessToken,
+            access_token: accessToken,
             refresh_token: refreshToken,
-            tipe_token:    'Bearer',
+            tipe_token: 'Bearer',
             pengguna: {
-                id:       pengguna.id,
-                nama:     pengguna.nama,
-                email:    pengguna.email,
-                peran:    pengguna.peran,
+                id: pengguna.id,
+                nama: pengguna.nama,
+                email: pengguna.email,
+                peran: pengguna.peran,
                 url_foto: pengguna.url_foto,
             },
         },
@@ -93,12 +93,12 @@ router.post('/login', async (req, res) => {
     }
 });
 
-//  Memperbarui access token 
+// Memperbarui access token 
 router.post('/refresh', async (req, res) => {
     try {
         const { refresh_token } = req.body;
 
-        // Pengecekan input
+        // Refresh token wajib diisi
         if (!refresh_token)
             return res.status(400).json({ success: false, message: 'Refresh token wajib diisi', data: null });
 
@@ -125,9 +125,9 @@ router.post('/refresh', async (req, res) => {
         await simpanRefreshToken(pengguna.id, tokenBaru);
 
         return res.status(200).json({ success: true, message: 'Token berhasil diperbarui', data: {
-            access_token:  accessToken,
+            access_token: accessToken,
             refresh_token: tokenBaru,
-            tipe_token:    'Bearer',
+            tipe_token: 'Bearer',
         },
     });
 
@@ -180,9 +180,9 @@ router.get('/me', verifikasiToken, async (req, res) => {
 // Mengarahkan ke halaman login GitHub 
 router.get('/oauth/github', (req, res) => {
     const parameter = new URLSearchParams({
-        client_id:    process.env.GITHUB_CLIENT_ID,
+        client_id: process.env.GITHUB_CLIENT_ID,
         redirect_uri: process.env.GITHUB_CALLBACK_URL,
-        scope:        'user:email',
+        scope: 'user:email',
     });
     // Redirect ke GitHub menggunakan Authorization Code Flow
     res.redirect(`https://github.com/login/oauth/authorize?${parameter.toString()}`);
@@ -193,7 +193,7 @@ router.get('/oauth/github/callback', async (req, res) => {
     try {
         const { code } = req.query;
 
-        // Pengecekan input
+        // Cek kode otorisasi
         if (!code)
             return res.status(400).json({ success: false, pesan: 'Kode otorisasi tidak ditemukan', data: null });
 
@@ -205,16 +205,17 @@ router.get('/oauth/github/callback', async (req, res) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                client_id:     process.env.GITHUB_CLIENT_ID,
+                client_id: process.env.GITHUB_CLIENT_ID,
                 client_secret: process.env.GITHUB_CLIENT_SECRET,
                 code,
-                redirect_uri:  process.env.GITHUB_CALLBACK_URL,
+                redirect_uri: process.env.GITHUB_CALLBACK_URL,
             }),
         });
-        const dataToken   = await responToken.json();
+        // Mengambil token GitHub
+        const dataToken = await responToken.json();
         const tokenGithub = dataToken.access_token;
 
-        // Pengecekan respon
+        // Cek apakah token GitHub berhasil diterima
         const tokenGithub = responToken.data.access_token;
         if (!tokenGithub)
             return res.status(401).json({ success: false, pesan: 'Gagal mendapatkan token dari GitHub', data: null });
@@ -229,11 +230,10 @@ router.get('/oauth/github/callback', async (req, res) => {
             }),
         ]);
         const dataPengguna = await responPengguna.json();
-        const dataEmail    = await responEmail.json();
+        const dataEmail = await responEmail.json();
 
         // Ambil email utama yang sudah diverifikasi oleh GitHub
-        const emailUtama =
-             dataEmail.find((e) => e.primary && e.verified)?.email || dataPengguna.email;
+        const emailUtama = dataEmail.find((e) => e.primary && e.verified)?.email || dataPengguna.email;
 
         // Pengecekan email
         if (!emailUtama)
@@ -251,17 +251,17 @@ router.get('/oauth/github/callback', async (req, res) => {
             if (pengguna) {
                 // Hubungkan akun lokal yang ada dengan akun GitHub
                 pengguna.provider_oauth = 'github';
-                pengguna.id_oauth       = String(dataPengguna.id);
-                pengguna.url_foto       = dataPengguna.avatar_url;
+                pengguna.id_oauth = String(dataPengguna.id);
+                pengguna.url_foto = dataPengguna.avatar_url;
                 await pengguna.save();
             } else {
                 // Buat akun baru dari data GitHub (simpan nama, email, foto profil)
                 pengguna = await User.create({
-                    nama:           dataPengguna.name || dataPengguna.login,
-                    email:          emailUtama,
+                    nama: dataPengguna.name || dataPengguna.login,
+                    email: emailUtama,
                     provider_oauth: 'github',
-                    id_oauth:       String(dataPengguna.id),
-                    url_foto:       dataPengguna.avatar_url,
+                    id_oauth: String(dataPengguna.id),
+                    url_foto: dataPengguna.avatar_url,
                 });
             }
         }
@@ -270,7 +270,7 @@ router.get('/oauth/github/callback', async (req, res) => {
         const { accessToken, refreshToken } = buatToken(pengguna);
         await simpanRefreshToken(pengguna.id, refreshToken);
 
-        const parameterRedirect = new URLSearchParams({ access_token:  accessToken, refresh_token: refreshToken});
+        const parameterRedirect = new URLSearchParams({ access_token: accessToken, refresh_token: refreshToken});
 
         return res.redirect( `${process.env.FRONTEND_URL}/oauth/callback?${parameterRedirect.toString()}`);
 

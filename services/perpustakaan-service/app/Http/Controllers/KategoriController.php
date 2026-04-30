@@ -35,11 +35,7 @@ class KategoriController extends Controller
             'slug' => Str::slug($request->nama_kategori),
         ]);
 
-        return response()->json([
-            'success' => true,
-            'pesan' => 'Kategori berhasil ditambahkan',
-            'data' => $kategori
-        ], 201);
+        return response()->json([ 'success' => true, 'pesan' => 'Kategori berhasil ditambahkan', 'data' => $kategori ], 201);
     }
 
     // DELETE /api/kategori/{id} untuk menghapus kategori dilakukan oleh admin

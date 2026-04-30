@@ -28,7 +28,7 @@ class BukuController extends Controller
             ->when($tahun, fn($q) => $q->where('tahun_terbit', $tahun))
             ->orderBy('created_at', 'desc');
 
-        // Ambil data
+        // Mengambil data
         $total = $query->count();
         $buku = $query->skip(($halaman - 1) * $perHalaman)->take($perHalaman)->get();
 
@@ -51,11 +51,7 @@ class BukuController extends Controller
 
         // Pengecekan buku ada
         if (!$buku)
-            return response()->json([
-                'success' => false,
-                'pesan' => 'Buku tidak ditemukan',
-                'data' => null
-            ], 404);
+            return response()->json([ 'success' => false, 'pesan' => 'Buku tidak ditemukan', 'data' => null ], 404);
 
         return response()->json(['success' => true, 'data' => $buku]);
     }
@@ -86,6 +82,7 @@ class BukuController extends Controller
                 'kategori_id' => $request->kategori_id,
                 'judul' => $request->judul,
                 'isbn' => $request->isbn,
+                'jumlah_halaman' => $request->jumlah_halaman,
                 'deskripsi' => $request->deskripsi,
                 'tahun_terbit' => $request->tahun_terbit,
                 'penerbit' => $request->penerbit,
@@ -107,19 +104,11 @@ class BukuController extends Controller
             // database commit
             DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'pesan' => 'Buku berhasil ditambahkan',
-                'data' => $buku->load(['kategori', 'penulis', 'stok']),
-            ], 201);
+            return response()->json([ 'success' => true, 'pesan' => 'Buku berhasil ditambahkan', 'data' => $buku->load(['kategori', 'penulis', 'stok'])], 201);
 
         } catch (\Throwable $e) {
             DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'pesan' => 'Gagal menambahkan buku',
-                'data' => null
-            ], 500);
+            return response()->json([ 'success' => false, 'pesan' => 'Gagal menambahkan buku', 'data' => null ], 500);
         }
     }
 
@@ -138,6 +127,7 @@ class BukuController extends Controller
                 'kategori_id' => $request->kategori_id  ?? $buku->kategori_id,
                 'judul' => $request->judul ?? $buku->judul,
                 'isbn' => $request->isbn ?? $buku->isbn,
+                'jumlah_halaman' => $request->jumlah_halaman ?? $buku->jumlah_halaman,
                 'deskripsi' => $request->deskripsi ?? $buku->deskripsi,
                 'tahun_terbit' => $request->tahun_terbit ?? $buku->tahun_terbit,
                 'penerbit' => $request->penerbit ?? $buku->penerbit,
@@ -154,11 +144,7 @@ class BukuController extends Controller
 
             DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'pesan' => 'Buku berhasil diperbarui',
-                'data' => $buku->load(['kategori', 'penulis']),
-            ]);
+            return response()->json([ 'success' => true, 'pesan' => 'Buku berhasil diperbarui', 'data' => $buku->load(['kategori', 'penulis']) ]);
 
         } catch (\Throwable $e) {
             DB::rollBack();
@@ -208,10 +194,6 @@ class BukuController extends Controller
             return response()->json(['success' => false, 'pesan' => 'Aksi tidak valid, gunakan pinjam atau kembali', 'data' => null], 400);
         }
 
-        return response()->json([
-            'success' => true,
-            'pesan' => 'Ketersediaan buku berhasil diperbarui',
-            'data' => ['buku_id' => $id, 'jumlah_tersedia' => $buku->fresh()->jumlah_tersedia],
-        ]);
+        return response()->json([ 'success' => true, 'pesan' => 'Ketersediaan buku berhasil diperbarui', 'data' => ['buku_id' => $id, 'jumlah_tersedia' => $buku->fresh()->jumlah_tersedia] ]);
     }
 }
