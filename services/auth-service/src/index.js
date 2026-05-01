@@ -36,7 +36,7 @@ app.use((err, req, res, next) => {
 sequelize
   .sync({ alter: true })
   .then(() => {
-    console.log('Database auth-db berhasil tersinkronisasi');
+    console.log('Database db-auth berhasil tersinkronisasi');
     app.listen(PORT, () =>
       console.log(`Auth-service berjalan di port ${PORT}`)
     );

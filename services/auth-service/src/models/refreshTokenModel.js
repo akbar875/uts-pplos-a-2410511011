@@ -14,7 +14,7 @@ const RefreshToken = sequelize.define('RefreshToken', {
     id_pengguna: {
         type: DataTypes.UUID,
         allowNull: false,
-        references: { model: 'pengguna', key: 'id' },
+        references: { model: 'users', key: 'id' },
         onDelete: 'CASCADE',
     },
 
