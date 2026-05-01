@@ -14,6 +14,7 @@ router.get('/', verifikasiToken, harusAdmin, async (req, res) => {
         const perHalaman = parseInt(req.query.per_halaman) || 10;
         const cari = req.query.cari;
 
+        // Query parameter
         const { Op } = require('sequelize');
         const where = {};
         if (cari) {
@@ -23,6 +24,7 @@ router.get('/', verifikasiToken, harusAdmin, async (req, res) => {
             ];
         }
 
+        // Mengambil data anggota
         const { count, rows } = await Anggota.findAndCountAll({
             where,
             limit: perHalaman,
