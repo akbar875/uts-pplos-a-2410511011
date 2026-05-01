@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buku;
-use App\Models\PenulisBuku;
+use App\Models\AuthorBuku;
 use App\Models\StokBuku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

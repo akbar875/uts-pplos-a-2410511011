@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const { verifikasiToken } = require('../middleware/jwtMiddleware');
 
 // Helper token dipanggil dari file utils terpisah
-const { buatToken, simpanRefreshToken } = require('../utils/tokenHelper');
+const { buatToken, simpanRefreshToken } = require('../utils/token');
 
 const router = express.Router();
 
@@ -216,7 +216,6 @@ router.get('/oauth/github/callback', async (req, res) => {
         const tokenGithub = dataToken.access_token;
 
         // Cek apakah token GitHub berhasil diterima
-        const tokenGithub = responToken.data.access_token;
         if (!tokenGithub)
             return res.status(401).json({ success: false, pesan: 'Gagal mendapatkan token dari GitHub', data: null });
 

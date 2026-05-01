@@ -3,7 +3,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 // Model Penulis
-class PenulisBuku extends Model {
+class AuthorBuku extends Model {
     protected $table = 'author_buku';
     protected $fillable = ['buku_id', 'nama_penulis'];
     // Relasi
