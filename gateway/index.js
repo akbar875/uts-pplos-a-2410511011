@@ -56,6 +56,7 @@ const proksi = (target) =>
     createProxyMiddleware({
         target,
         changeOrigin: true,
+        pathRewrite: (path, req) => req.originalUrl,
         on: {
             error: (err, req, res) => {
                 console.error(`[Gateway] Error proksi → ${target}:`, err.message);

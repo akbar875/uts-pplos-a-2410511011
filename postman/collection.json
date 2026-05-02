@@ -114,6 +114,28 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "GitHub",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3001/api/auth/oauth/github",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3001",
+              "path": [
+                "api",
+                "auth",
+                "oauth",
+                "github"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -210,7 +232,7 @@
         {
           "name": "Tambah Kategori",
           "request": {
-            "method": "GET",
+            "method": "POST",
             "header": [
               {
                 "key": "Authorization",
@@ -232,14 +254,127 @@
             }
           },
           "response": []
-        }
-      ]
-    },
-    {
-      "name": "Member Service",
-      "item": [
+        },
         {
-          "name": "Semua Anggota",
+          "name": "Update Buku",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/buku/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "buku",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Hapus Buku",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/buku/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "buku",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Hapus Kategori",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/kategori/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "kategori",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Tambah Ulasan",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Hapus Ulasan",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/buku/1/ulasan/{ulasanId}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "buku",
+                "1",
+                "ulasan",
+                "{ulasanId}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detail Pinjaman",
           "request": {
             "method": "GET",
             "header": [
@@ -250,7 +385,149 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:3002/api/anggota",
+              "raw": "http://localhost:3002/api/pinjaman/{id}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3002",
+              "path": [
+                "api",
+                "pinjaman",
+                "{id}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Ketersediaan Buku",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/buku/1/ketersediaan",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "buku",
+                "1",
+                "ketersediaan"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Kembalikan Buku",
+          "request": {
+            "method": "PATCH",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ulasan Buku",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Member Service",
+      "item": [
+        {
+          "name": "Daftar Anggota",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk3ZTQ2Y2U5LWI2OWQtNDU5My05OTNkLWViZGE2MmRmODViNSIsImVtYWlsIjoicmF5YWphQGdtYWlsLmNvbSIsInBlcmFuIjoiYWRtaW4iLCJpYXQiOjE3Nzc2NjU5MDIsImV4cCI6MTc3NzY2NjgwMn0.zuktbDbdRTXLFqEu3rRk2cwHO73hrfVfaW0gUwcL0hw",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nama\": \"Chandra Kasih\",\r\n    \"email\": \"Chandra@gmail.com\",\r\n    \"telepon\": \"081234567890\",\r\n    \"alamat\": \"Jl. Merdeka No. 1, Jakarta\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/anggota?cari=Chandra",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "anggota"
+              ],
+              "query": [
+                {
+                  "key": "cari",
+                  "value": "Chandra"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Semua Anggota",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk3ZTQ2Y2U5LWI2OWQtNDU5My05OTNkLWViZGE2MmRmODViNSIsImVtYWlsIjoicmF5YWphQGdtYWlsLmNvbSIsInBlcmFuIjoiYWRtaW4iLCJpYXQiOjE3Nzc2NjU5MDIsImV4cCI6MTc3NzY2NjgwMn0.zuktbDbdRTXLFqEu3rRk2cwHO73hrfVfaW0gUwcL0hw",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3002/api/anggota?cari=Chandra",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -259,13 +536,54 @@
               "path": [
                 "api",
                 "anggota"
+              ],
+              "query": [
+                {
+                  "key": "cari",
+                  "value": "Chandra"
+                }
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Tambah Pinjaman",
+          "name": "Detail Anggota",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk3ZTQ2Y2U5LWI2OWQtNDU5My05OTNkLWViZGE2MmRmODViNSIsImVtYWlsIjoicmF5YWphQGdtYWlsLmNvbSIsInBlcmFuIjoiYWRtaW4iLCJpYXQiOjE3Nzc2NjU5MDIsImV4cCI6MTc3NzY2NjgwMn0.zuktbDbdRTXLFqEu3rRk2cwHO73hrfVfaW0gUwcL0hw",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3002/api/anggota/2e9b2e81-41f7-4df8-ac1d-ead267b9ddc1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3002",
+              "path": [
+                "api",
+                "anggota",
+                "2e9b2e81-41f7-4df8-ac1d-ead267b9ddc1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile Anggota",
+          "request": {
+            "method": "PUT",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Pinjam Buku",
           "request": {
             "method": "POST",
             "header": [
@@ -313,6 +631,50 @@
                 "denda"
               ]
             }
+          },
+          "response": []
+        },
+        {
+          "name": "Bayar Denda",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3002/api/denda/{id}/bayar",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3002",
+              "path": [
+                "api",
+                "denda",
+                "{id}",
+                "bayar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Pinjaman Aktif",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Semua Pinjaman",
+          "request": {
+            "method": "GET",
+            "header": []
           },
           "response": []
         }
