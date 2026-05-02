@@ -271,7 +271,22 @@ router.get('/oauth/github/callback', async (req, res) => {
 
         const parameterRedirect = new URLSearchParams({ access_token: accessToken, refresh_token: refreshToken});
 
-        return res.redirect( `${process.env.FRONTEND_URL}/oauth/callback?${parameterRedirect.toString()}`);
+        return res.status(200).json({
+            success: true,
+            pesan: 'Login GitHub berhasil',
+            data: {
+                access_token: accessToken,
+                refresh_token: refreshToken,
+                tipe_token: 'Bearer',
+                pengguna: {
+                    id: pengguna.id,
+                    nama: pengguna.nama,
+                    email: pengguna.email,
+                    peran: pengguna.peran,
+                    url_foto: pengguna.url_foto,
+                }
+            }
+        });
 
     } catch (err) {
         console.error(err);

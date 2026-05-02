@@ -39,7 +39,7 @@ app.use((err, req, res, next) => {
 
 // Sinkronisasi database lalu jalankan server
 sequelize
-  .sync({ alter: true })
+  .sync()
   .then(() => {
     console.log('Database db_member berhasil tersinkronisasi');
     app.listen(PORT, () =>

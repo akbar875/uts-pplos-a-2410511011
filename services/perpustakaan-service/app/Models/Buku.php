@@ -7,8 +7,8 @@ class Buku extends Model {
     protected $table    = 'buku';
     protected $fillable = [
         'kategori_id', 'judul', 'isbn', 'jumlah_halaman', 'deskripsi',
-        'tahun_terbit', 'penerbit', 'url_sampul',
-        'jumlah_total', 'jumlah_tersedia',
+        'tahun_terbit', 'penerbit',
+        'jumlah_total', 'jumlah_tersedia', 'author',
     ];
 
     // Konversi nilai integer
@@ -22,8 +22,8 @@ class Buku extends Model {
     // Relasi
     public function kategori()  { 
         return $this->belongsTo(Kategori::class, 'kategori_id'); }
-    public function penulis()   { 
-        return $this->hasMany(PenulisBuku::class, 'buku_id'); }
+    public function author()   { 
+        return $this->hasMany(AuthorBuku::class, 'buku_id'); }
     public function stok()      { 
         return $this->hasMany(StokBuku::class, 'buku_id'); }
     public function tag()       { 

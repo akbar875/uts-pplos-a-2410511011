@@ -32,7 +32,7 @@ class JwtVerify
             $request->merge(['pengguna' => (array) $terdekode]);
 
             // Cek peran jika ada parameter
-            if ($peran && $terdekode->peran !== $peran)
+            if ($peran && (!isset($terdekode->peran) || $terdekode->peran !== $peran))
                 return response()->json([ 'success' => false, 'message' => 'Hak akses tidak mencukupi', 'data' => null ], 403);
 
         } catch (ExpiredException) {
@@ -42,7 +42,7 @@ class JwtVerify
         } catch (Throwable) {
             return response()->json([ 'success' => false, 'message' => 'Token akses tidak valid', 'data' => null ], 401);
         }
-
+        
         return $next($request);
     }
 }

@@ -18,7 +18,7 @@ services:
     networks:
       - pplos-net
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-psecret"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -38,7 +38,7 @@ services:
     networks:
       - pplos-net
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-psecret"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -58,7 +58,7 @@ services:
     networks:
       - pplos-net
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-psecret"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost",]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -82,7 +82,7 @@ services:
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
       GITHUB_CALLBACK_URL: http://localhost:3001/api/auth/oauth/github/callback
-      FRONTEND_URL: http://localhost:3000
+      FRONTEND_URL: http://localhost:3000/api/auth
     ports:
       - "3001:3001"
     depends_on:
@@ -155,7 +155,7 @@ services:
       AUTH_SERVICE_URL: http://auth-service:3001
       PERPUSTAKAAN_SERVICE_URL: http://perpustakaan-service:8000
       MEMBER_SERVICE_URL: http://member-service:3002
-      JWT_SECRET: supersecretjwtkey_minimal32karakter
+      JWT_SECRET: ${JWT_SECRET}
       RATE_LIMIT_MAX: 60
       RATE_LIMIT_WINDOW_MS: 60000
     ports:

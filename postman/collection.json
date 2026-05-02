@@ -210,7 +210,7 @@
         {
           "name": "Tambah Kategori",
           "request": {
-            "method": "GET",
+            "method": "POST",
             "header": [
               {
                 "key": "Authorization",
@@ -228,6 +228,191 @@
               "path": [
                 "api",
                 "kategori"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Buku",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/buku/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "buku",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Hapus Buku",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/buku/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "buku",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Hapus Kategori",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/kategori/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "kategori",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detail Pinjaman",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3002/api/pinjaman/{id}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3002",
+              "path": [
+                "api",
+                "pinjaman",
+                "{id}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Ketersediaan Buku",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/buku/1/ketersediaan",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "buku",
+                "1",
+                "ketersediaan"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Hapus Ulasan",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/api/buku/1/ulasan/{ulasanId}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "buku",
+                "1",
+                "ulasan",
+                "{ulasanId}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8000/api/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "health"
               ]
             }
           },
@@ -259,6 +444,33 @@
               "path": [
                 "api",
                 "anggota"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detail Anggota",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3002/api/anggota/{id}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3002",
+              "path": [
+                "api",
+                "anggota",
+                "{id}"
               ]
             }
           },
@@ -311,6 +523,34 @@
               "path": [
                 "api",
                 "denda"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Bayar Denda",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3002/api/denda/{id}/bayar",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3002",
+              "path": [
+                "api",
+                "denda",
+                "{id}",
+                "bayar"
               ]
             }
           },
