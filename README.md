@@ -13,7 +13,7 @@ Dosen: Muhammad Panji Muslim, S.Pd., M.Kom
 | OAuth Provider | GitHub OAuth |
 
 ## Demo Video
-Tautan demo: [https://youtu.be/LINK_VIDEO](https://youtu.be/LINK_VIDEO)
+Tautan demo: [https://youtu.be/A0i09j8c6DY?si=XnWtA6v8chtyxc2c]
 
 ## Tech Stack
 - auth-service: Node.js, Express, Sequelize, MySQL, JWT, GitHub OAuth
